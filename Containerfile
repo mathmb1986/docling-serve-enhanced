@@ -120,6 +120,18 @@ RUN --mount=from=uv_stage,source=/uv,target=/bin/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     umask 002 && uv sync --frozen --no-dev --all-extras ${UV_SYNC_EXTRA_ARGS}
 
+# ======================================================
+# IA_HomeLabs Enhanced - DCLX Grid Performance Fix
+# Docling Core 2.101.1
+# ======================================================
+
+COPY --chown=1001:0 patches/fix_dclx_grid.py /opt/app-root/src/fix_dclx_grid.py
+
+RUN python /opt/app-root/src/fix_dclx_grid.py \
+    && rm /opt/app-root/src/fix_dclx_grid.py
+
+# ======================================================
+
 ENV LD_PRELOAD=/usr/local/lib/libmimalloc.so
 EXPOSE 5001
 
